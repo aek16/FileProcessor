@@ -34,7 +34,7 @@ namespace FileProcessorOMS.Models
         }
     }
 
-
+    //Used to Write to CSV
     public sealed class CsvAAAMap: ClassMap<Transaction>
     {
         public CsvAAAMap()

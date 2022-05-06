@@ -11,9 +11,7 @@ namespace FileProcessorOMS.Services
 {
     public class FileProcessorService
     {
-        List<Transaction> transactions;
-        List<Security> securities;
-        List<Portfolio> portfolios;
+
 
         public FileProcessorService()
         {
@@ -21,8 +19,12 @@ namespace FileProcessorOMS.Services
 
         public void ProcessFiles(string securityFile, string portfolioFile, string transactionFile, string outputFolder)
         {
-            try {
+            List<Transaction> transactions;
+            List<Security> securities;
+            List<Portfolio> portfolios;
 
+            try
+            {
                 using (var reader = new StreamReader(securityFile))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
@@ -38,6 +40,7 @@ namespace FileProcessorOMS.Services
                 using (var reader = new StreamReader(transactionFile))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
+                    //Adding CSV map to ignore additional parameters in Transaction Class
                     csv.Context.RegisterClassMap<TransactionMap>();
                     transactions = csv.GetRecords<Transaction>().ToList();
                 }
@@ -61,11 +64,11 @@ namespace FileProcessorOMS.Services
 
             try
             {
-                WriteAAAFile(outputFolder);
+                WriteAAAFile(outputFolder, transactions);
 
-                WriteBBBFile(outputFolder);
+                WriteBBBFile(outputFolder, transactions);
 
-                WriteCCCFile(outputFolder);
+                WriteCCCFile(outputFolder, transactions);
             }
             catch (Exception ex) {
                 Console.WriteLine($"There was an error writing to files: {ex.Message}");
@@ -73,7 +76,7 @@ namespace FileProcessorOMS.Services
             }
         }
 
-        public void WriteAAAFile(string outputFolder)
+        public void WriteAAAFile(string outputFolder, List<Transaction> transactions)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -90,7 +93,7 @@ namespace FileProcessorOMS.Services
 
         }
 
-        public void WriteBBBFile(string outputFolder)
+        public void WriteBBBFile(string outputFolder, List<Transaction> transactions)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -106,7 +109,7 @@ namespace FileProcessorOMS.Services
             }
         }
 
-        public void WriteCCCFile(string outputFolder)
+        public void WriteCCCFile(string outputFolder, List<Transaction> transactions)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
