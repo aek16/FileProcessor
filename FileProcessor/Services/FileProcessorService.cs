@@ -64,67 +64,32 @@ namespace FileProcessorOMS.Services
 
             try
             {
-                WriteAAAFile(outputFolder, transactions);
-
-                WriteBBBFile(outputFolder, transactions);
-
-                WriteCCCFile(outputFolder, transactions);
+                WriteToFile<CsvAAAMap>(outputFolder, transactions, ",", true, "aaa");
+                WriteToFile<CsvBBBMap>(outputFolder, transactions, "|", true, "bbb");
+                WriteToFile<CsvCCCMap>(outputFolder, transactions, ",", false, "ccc");
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine($"There was an error writing to files: {ex.Message}");
                 throw ex;
             }
         }
 
-        public void WriteAAAFile(string outputFolder, List<Transaction> transactions)
+        public void WriteToFile<T>(string outputFolder, List<Transaction> transactions, string delimiter, bool header, string extention) where T : ClassMap
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                Delimiter = ",",
-                HasHeaderRecord = true
+                Delimiter = delimiter,
+                HasHeaderRecord = header
             };
 
-            using (var writer = new StreamWriter(Path.Combine(outputFolder, "oms.aaa")))
+            using (var writer = new StreamWriter(Path.Combine(outputFolder, "oms." + extention)))
             using (var csvWriter = new CsvWriter(writer, config))
             {
-                csvWriter.Context.RegisterClassMap<CsvAAAMap>();
+                csvWriter.Context.RegisterClassMap<T>();
                 csvWriter.WriteRecords(transactions);
             }
 
         }
-
-        public void WriteBBBFile(string outputFolder, List<Transaction> transactions)
-        {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                Delimiter = "|",
-                HasHeaderRecord = true
-            };
-
-            using (var writer = new StreamWriter(Path.Combine(outputFolder, "oms.bbb")))
-            using (var csvWriter = new CsvWriter(writer, config))
-            {
-                csvWriter.Context.RegisterClassMap<CsvBBBMap>();
-                csvWriter.WriteRecords(transactions);
-            }
-        }
-
-        public void WriteCCCFile(string outputFolder, List<Transaction> transactions)
-        {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                Delimiter = ",",
-                HasHeaderRecord = false
-            };
-
-            using (var writer = new StreamWriter(Path.Combine(outputFolder, "oms.ccc")))
-            using (var csvWriter = new CsvWriter(writer, config))
-            {
-                csvWriter.Context.RegisterClassMap<CsvCCCMap>();
-                csvWriter.WriteRecords(transactions);
-            }
-
-        }
-
     }
 }
