@@ -84,7 +84,7 @@ namespace FileProcessorOMS.Services
                 HasHeaderRecord = true
             };
 
-            using (var writer = new StreamWriter(outputFolder + "/oms.aaa"))
+            using (var writer = new StreamWriter(Path.Combine(outputFolder, "oms.aaa")))
             using (var csvWriter = new CsvWriter(writer, config))
             {
                 csvWriter.Context.RegisterClassMap<CsvAAAMap>();
@@ -101,7 +101,7 @@ namespace FileProcessorOMS.Services
                 HasHeaderRecord = true
             };
 
-            using (var writer = new StreamWriter(outputFolder + "/oms.bbb"))
+            using (var writer = new StreamWriter(Path.Combine(outputFolder, "oms.bbb")))
             using (var csvWriter = new CsvWriter(writer, config))
             {
                 csvWriter.Context.RegisterClassMap<CsvBBBMap>();
@@ -117,7 +117,7 @@ namespace FileProcessorOMS.Services
                 HasHeaderRecord = false
             };
 
-            using (var writer = new StreamWriter(outputFolder + "/oms.ccc"))
+            using (var writer = new StreamWriter(Path.Combine(outputFolder, "oms.ccc")))
             using (var csvWriter = new CsvWriter(writer, config))
             {
                 csvWriter.Context.RegisterClassMap<CsvCCCMap>();
