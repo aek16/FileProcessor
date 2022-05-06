@@ -2,7 +2,7 @@
 
 2 Projects are included:
 
-*. FileProcessor
+* FileProcessor
   * Contains the logic of reading in the file and writing them out
 
 * FileProcessorTests
